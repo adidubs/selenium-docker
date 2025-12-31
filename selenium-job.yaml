@@ -1,3 +1,4 @@
+---
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -16,16 +17,18 @@ spec:
         - name: selenium-container
           image: adidubs/selenium-kubernatess:latest
           imagePullPolicy: Always
-          command: ["sh", "-c"]
+          command:
+            - sh
+            - -c
           args:
             - cd /app && mvn clean test
           resources:
             requests:
-              memory: "1Gi"
-              cpu: "500m"
+              memory: 1Gi
+              cpu: 500m
             limits:
-              memory: "2Gi"
+              memory: 2Gi
               cpu: "1"
           env:
             - name: JAVA_OPTS
-              value: "-Xmx1024m"
+              value: -Xmx1024m
