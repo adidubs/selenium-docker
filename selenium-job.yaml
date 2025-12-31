@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: selenium-job
+  labels:
+    app: selenium-tests
+spec:
+  backoffLimit: 1
+  template:
+    metadata:
+      labels:
+        app: selenium-tests
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: selenium-container
+          image: adidubs/selenium-kubernatess:latest
+          imagePullPolicy: Always
+          command: ["sh", "-c"]
+          args:
+            - cd /app && mvn clean test
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
+          env:
+            - name: JAVA_OPTS
+              value: "-Xmx1024m"
