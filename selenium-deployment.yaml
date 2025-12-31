@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: selenium-deployment
+  labels:
+    app: selenium-tests
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: selenium-tests
+  template:
+    metadata:
+      labels:
+        app: selenium-tests
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: selenium-container
+          image: adidubs/selenium-kubernatess:latest
+          imagePullPolicy: Always
+          command:
+            - sh
+            - -c
+          args:
+            - cd /app && mvn clean test
+          resources:
+            requests:
+              memory: 1Gi
+              cpu: 500m
+            limits:
+              memory: 2Gi
+              cpu: "1"
+          env:
+            - name: JAVA_OPTS
+              value: -Xmx1024m
